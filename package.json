@@ -1,6 +1,6 @@
 {
   "name": "codex-launcher",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "private": true,
   "description": "Windows Codex startup animation with in-app controls and optional Dream Skin integration",
   "main": "main.cjs",
