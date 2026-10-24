@@ -30,6 +30,7 @@ $start.RedirectStandardInput=$true
 $start.RedirectStandardOutput=$true
 $start.RedirectStandardError=$true
 $start.EnvironmentVariables['ELECTRON_RUN_AS_NODE']='1'
+$start.EnvironmentVariables['ELECTRON_NO_ATTACH_CONSOLE']='1'
 $process=[Diagnostics.Process]::Start($start)
 Trace-Mcp ('Server started: '+$process.Id)
 try {
