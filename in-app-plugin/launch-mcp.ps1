@@ -1,4 +1,6 @@
 ﻿$ErrorActionPreference='Stop'
+function Trace-Mcp([string]$Message){if($env:CODEX_ANIMATION_MCP_DEBUG -eq '1'){[Console]::Error.WriteLine('[animation-mcp] '+$Message)}}
+Trace-Mcp 'Compiling byte relay'
 Add-Type -TypeDefinition @'
 using System.IO;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ public static class AnimationMcpRelay {
  public static async Task Copy(Stream input,Stream output){
   var bytes=new byte[8192];int count;
   while((count=await input.ReadAsync(bytes,0,bytes.Length).ConfigureAwait(false))>0){
+   if(System.Environment.GetEnvironmentVariable("CODEX_ANIMATION_MCP_DEBUG")=="1")System.Console.Error.WriteLine("[animation-mcp] Relaying "+count+" bytes");
    await output.WriteAsync(bytes,0,count).ConfigureAwait(false);
    await output.FlushAsync().ConfigureAwait(false);
   }
@@ -31,6 +34,7 @@ $start.RedirectStandardOutput=$true
 $start.RedirectStandardError=$true
 $start.EnvironmentVariables['ELECTRON_RUN_AS_NODE']='1'
 $process=[Diagnostics.Process]::Start($start)
+Trace-Mcp ('Server started: '+$process.Id)
 try {
  # Relay raw bytes; PowerShell's native pipeline otherwise consumes MCP stdin
  # or recodes Chinese JSON on systems using a non-UTF-8 console code page.
