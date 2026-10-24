@@ -25,3 +25,7 @@
 - **Codex Dream Skin、Wallpaper Engine、SceneViewer**：可选外部组件，不随本仓库发布，分别适用其原作者的许可。
 
 本仓库不声称上游代码、第三方库、标志或媒体由本项目原创。媒体见 [ASSETS.md](ASSETS.md)。
+
+## Node.js
+
+Windows 发布包附带来自 [nodejs.org](https://nodejs.org/dist/v22.23.4/) 的 Node.js 22.23.4 x64。构建时验证官方 ZIP 的 SHA-256；完整许可证及其第三方声明随包保存在 `desktop-extension/node-runtime/LICENSE`。

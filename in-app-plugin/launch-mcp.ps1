@@ -18,7 +18,7 @@ public static class AnimationMcpRelay {
 }
 '@
 $root=Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation'
-$executable=Join-Path $root 'desktop-extension\electron.exe'
+$executable=Join-Path $root 'desktop-extension\node-runtime\node.exe'
 $server=Join-Path $root 'in-app-plugin\server.cjs'
 if(!(Test-Path -LiteralPath $executable) -or !(Test-Path -LiteralPath $server)){throw 'Install the Codex Launch Animation Windows runtime before enabling this plugin.'}
 $start=New-Object Diagnostics.ProcessStartInfo
@@ -29,8 +29,6 @@ $start.CreateNoWindow=$true
 $start.RedirectStandardInput=$true
 $start.RedirectStandardOutput=$true
 $start.RedirectStandardError=$true
-$start.EnvironmentVariables['ELECTRON_RUN_AS_NODE']='1'
-$start.EnvironmentVariables['ELECTRON_NO_ATTACH_CONSOLE']='1'
 $process=[Diagnostics.Process]::Start($start)
 Trace-Mcp ('Server started: '+$process.Id)
 try {
