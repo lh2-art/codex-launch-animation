@@ -1,7 +1,7 @@
 ﻿[CmdletBinding(SupportsShouldProcess)]
 param([string]$ShortcutPath,[switch]$SkipPluginRegistration)
 $ErrorActionPreference='Stop'
-trap { [Console]::Error.WriteLine($_.ScriptStackTrace); throw }
+trap { [Console]::Error.WriteLine($_.ToString()+[Environment]::NewLine+$_.ScriptStackTrace); throw $_ }
 if($env:OS -ne 'Windows_NT'){throw 'Windows 10/11 is required.'}
 $source=$PSScriptRoot
 $target=Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation'
@@ -47,7 +47,9 @@ if($PSCmdlet.ShouldProcess($target,'Install animation runtime and preserve exist
  New-Item -ItemType Directory -Path (Join-Path $target 'in-app-plugin') -Force | Out-Null
  Copy-InstallTree $plugin (Join-Path $target 'in-app-plugin')
  Copy-Item -LiteralPath (Join-Path $source 'Uninstall.ps1') -Destination $target -Force
- $shortcut.TargetPath=$runtimeTarget;$shortcut.Arguments='';$shortcut.WorkingDirectory=Split-Path -Parent $runtimeTarget
+ $shortcut.TargetPath=$runtimeTarget
+ $shortcut.Arguments=''
+ $shortcut.WorkingDirectory=(Split-Path -Parent $runtimeTarget)
  if(!$shortcut.IconLocation -or $shortcut.IconLocation -eq ',0'){$shortcut.IconLocation=(Join-Path $target 'desktop-extension\resources\app\assets\chatgpt-taskbar.ico')+',0'}
  $shortcut.Save()
  $market=@{name='codex-launch-animation';interface=@{displayName='Codex Launch Animation'};plugins=@(@{name='chatgpt-launch-animation';source=@{source='local';path='./in-app-plugin'};policy=@{installation='AVAILABLE';authentication='ON_INSTALL'};category='Productivity'})}
