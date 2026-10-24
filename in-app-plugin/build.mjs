@@ -10,7 +10,7 @@ const js = text => `<script>${text.replaceAll('</script', '<\\/script')}</script
 const image = filename => `data:image/${filename.endsWith('.png') ? 'png' : 'jpeg'};base64,${fs.readFileSync(path.join(source, 'assets', filename)).toString('base64')}`;
 
 // PowerShell resolves the user-local runtime without author-specific paths.
-const portableManifest={"mcpServers": {"launch_animation": {"command": "powershell.exe", "args": ["-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation\\in-app-plugin\\launch-mcp.ps1')"], "startup_timeout_sec": 20, "default_tools_approval_mode": "approve"}}};
+const portableManifest={"mcpServers": {"launch_animation": {"command": "powershell.exe", "args": ["-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation\\in-app-plugin\\launch-mcp.ps1')"], "startup_timeout_sec": 60, "default_tools_approval_mode": "approve"}}};
 fs.writeFileSync(path.join(root,'.mcp.json'),JSON.stringify(portableManifest,null,2)+'\n');
 
 await build({ entryPoints: [path.join(root, 'server.mjs')], outfile: path.join(root, 'server.cjs'), bundle: true, platform: 'node', format: 'cjs', target: 'node20', banner: { js: 'const __pluginImportMetaUrl = require("node:url").pathToFileURL(__filename).href;' }, define: { 'import.meta.url': '__pluginImportMetaUrl' }, supported: { 'top-level-await': false } }).catch(async error => { throw error; });
