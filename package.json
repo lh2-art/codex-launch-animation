@@ -1,0 +1,74 @@
+{
+  "name": "codex-launcher",
+  "version": "2.7.0",
+  "private": true,
+  "description": "Windows Codex startup animation with in-app controls and optional Dream Skin integration",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "preview": "electron . --preview",
+    "settings": "electron . --settings",
+    "test": "node --test tests/helper-client.test.cjs tests/settings-model.test.cjs tests/skin-launch.test.cjs tests/skin-scene.test.cjs tests/skin-state.test.cjs tests/skin-veil.test.cjs tests/public-config.test.cjs",
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File ./build-desktop.ps1",
+    "build:plugin": "node in-app-plugin/build.mjs",
+    "release": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/package-release.ps1",
+    "test:plugin": "node in-app-plugin/tests/mcp-smoke.mjs --dist"
+  },
+  "devDependencies": {
+    "electron": "39.1.0"
+  },
+  "build": {
+    "appId": "com.local.codexlauncher",
+    "productName": "Codex Launch Overlay",
+    "files": [
+      "index.html",
+      "style.css",
+      "script.js",
+      "main.cjs",
+      "skin-early.cjs",
+      "helper-client.cjs",
+      "native-platform.ps1",
+      "native-windows.cs",
+      "native-icons.cs",
+      "skin-state.cjs",
+      "native-cdp.mjs",
+      "native-launch.cjs",
+      "skin-launch.cjs",
+      "skin-scene.cjs",
+      "skin-scene-session.cjs",
+      "skin-integration.json",
+      "native-renderer.cjs",
+      "licenses/baili-codex-MIT.txt",
+      "licenses/artemis-startup-MIT.txt",
+      "preload.cjs",
+      "settings-model.js",
+      "settings-i18n.js",
+      "settings.html",
+      "settings.js",
+      "skin-veil.cjs",
+      "skin-veil-controls.js",
+      "settings.css",
+      "assets/chatgpt-shortcut-icon.png",
+      "assets/chatgpt-taskbar.ico",
+      "assets/opening-clouds.png",
+      "assets/gpt6-stars-full.mp4",
+      "assets/gpt6-stars-full-poster.jpg",
+      "assets/gpt6-stars-tail.jpg",
+      "assets/gsap.min.js",
+      "platform-runtime.cjs"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/chatgpt-shortcut-icon.png"
+    }
+  },
+  "license": "MIT",
+  "author": "Mayn (lh2-art)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lh2-art/codex-launch-animation.git"
+  },
+  "allowScripts": {
+    "electron@39.1.0": true
+  }
+}

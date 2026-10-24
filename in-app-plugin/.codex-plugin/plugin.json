@@ -1,0 +1,24 @@
+{
+  "name": "chatgpt-launch-animation",
+  "version": "2.7.0",
+  "description": "在 ChatGPT 内调整和预览本机启动动画，控制字体、字号、位置、间距、图标大小及启用状态。",
+  "author": {
+    "name": "Mayn"
+  },
+  "mcpServers": "./.mcp.json",
+  "requires_local_executor": true,
+  "interface": {
+    "displayName": "ChatGPT 启动动画",
+    "shortDescription": "在软件内调整与预览启动动画",
+    "longDescription": "应用内控制页、预览与启用开关。原桌面入口在官方主窗口内尽早播放动画，与上次皮肤同步加载；可跳过，动画结束即释放媒体与覆盖层。",
+    "developerName": "Mayn",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "logo": "./assets/icon.png",
+    "brandColor": "#002fa7"
+  }
+}

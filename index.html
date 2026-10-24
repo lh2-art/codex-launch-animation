@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZTFXAUYK5CTNORiaVa+5W+BWxthgeEv9MBXe2ju6W7k='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'none'" />
+  <title>Codex Launch</title>
+  <script src="./assets/gsap.min.js"></script>
+  <script src="./settings-model.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main id="root" data-composition-id="codex-launcher" data-width="1920" data-height="1080" data-duration="26.96">
+    <button class="startup-skip" type="button" aria-label="跳过启动动画">跳过</button>
+
+    <!-- 不透明开场：镜头推进完成后，原图标再开始旋转 -->
+    <section class="launch-stage" aria-label="Codex launcher">
+      <img class="opening-backdrop" src="./assets/opening-clouds.png" alt="" />
+      <div class="opening-camera">
+      <button class="launch-button" type="button" aria-label="Launch Codex">
+        <span class="codex-glyph" aria-hidden="true">
+          <img src="./assets/chatgpt-shortcut-icon.png" alt="" />
+          <span class="codex-base"></span>
+          <span class="codex-color"></span>
+        </span>
+        <svg class="opening-ring" viewBox="-70 -70 140 140" aria-hidden="true"></svg>
+        <svg class="opening-ignition" viewBox="-70 -70 140 140" aria-hidden="true"></svg>
+      </button>
+      </div>
+    </section>
+
+    <!-- 正片：星云视频，铺满当前窗口 -->
+    <div class="video-shell">
+      <video id="gpt6-official-video" class="clip" data-start="8.2" data-duration="15.274667" data-track-index="1"
+             muted playsinline preload="auto"
+             poster="./assets/gpt6-stars-full-poster.jpg">
+        <source src="./assets/gpt6-stars-full.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="star-tail" aria-hidden="true">
+      <img src="./assets/gpt6-stars-tail.jpg" alt="" />
+    </div>
+
+    <section class="brand-reveal" aria-label="知行合一 ChatGPT Codex">
+      <div class="brand-lockup">
+        <div class="brand-logo-position"><span id="brand-gpt-logo" class="brand-logo" data-start="23.474667" data-duration="3.48"><img src="./assets/chatgpt-shortcut-icon.png" alt="" /></span></div>
+        <div class="brand-motto" aria-label="知行合一"><span class="brand-char">知</span><span class="brand-char">行</span><span class="brand-char">合</span><span class="brand-char">一</span></div>
+        <div class="brand-name" aria-label="ChatGPT"><span class="brand-char">C</span><span class="brand-char">h</span><span class="brand-char">a</span><span class="brand-char">t</span><span class="brand-char">G</span><span class="brand-char">P</span><span class="brand-char">T</span></div>
+        <div class="brand-caption" aria-label="Codex"><span class="brand-char">C</span><span class="brand-char">o</span><span class="brand-char">d</span><span class="brand-char">e</span><span class="brand-char">x</span></div>
+      </div>
+    </section>
+    <div class="brand-light" aria-hidden="true"><div class="light-band" data-layout-allow-overflow></div></div>
+    <div class="white-flash" aria-hidden="true"></div>
+
+    <!-- 设置面板（仅 preview / settings 模式可见） -->
+    <button class="settings-button" type="button" aria-label="打开设置" aria-expanded="false">设置</button>
+    <aside class="settings-panel" aria-label="Launcher settings" aria-hidden="true">
+      <div class="settings-header">
+        <strong>ChatGPT 启动动画</strong>
+        <button class="settings-close" type="button" aria-label="关闭设置">关闭</button>
+      </div>
+      <p class="settings-description">原快捷方式图标旋转 → 群星汇聚消散 → 星空上文字汇聚 → 白光扫过后显示原生界面。</p>
+      <label class="settings-toggle">
+        <span>打开 ChatGPT 时自动播放</span>
+        <input id="auto-play-toggle" type="checkbox" checked />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+      </label>
+      <button class="preview-button" type="button">预览启动动画</button>
+      <p class="settings-status" aria-live="polite">设置会自动保存。预览不会启动 ChatGPT。</p>
+    </aside>
+
+    <button class="replay" type="button" aria-label="重播启动动画">重播</button>
+    <button class="overlay-close" type="button">关闭预览</button>
+  </main>
+
+  <script src="./script.js"></script>
+  <script>window.__timelines = window.__timelines || {}; window.__timelines["codex-launcher"] = window.__timelines["codex-launcher"] || null;</script>
+</body>
+</html>

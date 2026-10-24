@@ -1,0 +1,228 @@
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'); font-weight: 400; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei Bold'), local('Microsoft YaHei'); font-weight: 800; }
+
+:root {
+  color-scheme: dark;
+  --bg: #050609;
+  --ink: #f5f7fb;
+  --muted: rgba(232, 237, 246, .5);
+  --cyan: #b9eeff;
+  --blue: #78b7ff;
+}
+
+* { box-sizing: border-box; }
+.startup-skip { position:absolute; top:64px; right:32px; z-index:30; border:0; border-radius:0; background:transparent; color:#fff; mix-blend-mode:difference; padding:8px; font:14px 'Microsoft YaHei',sans-serif; cursor:pointer; -webkit-app-region:no-drag; }
+body[data-mode="editor"] .startup-skip { display:none; }
+
+/* Every output surface is opaque; no desktop alpha/window transparency. */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #070b12;
+}
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #070b12;
+}
+
+.launch-stage {
+  z-index: 2;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #070b12;
+}
+.opening-backdrop { position:absolute; inset:-3%; width:106%; height:106%; object-fit:cover; pointer-events:none; will-change:transform; }
+.opening-camera { position:absolute; inset:0; display:grid; place-items:center; perspective:1200px; will-change:transform; }
+.opening-ring { opacity:0; }
+.codex-base { position:absolute; inset:0; background:#000; mask-size:100% 100%; mask-repeat:no-repeat; -webkit-mask-size:100% 100%; -webkit-mask-repeat:no-repeat; filter:drop-shadow(0 1px 1px rgba(148,175,190,.65)) drop-shadow(0 9px 9px rgba(0,0,0,.9)); transform:translateZ(0); will-change:transform; }
+
+/* 图标随窗口尺寸自适应：取宽高中的较小值，并设上下限，保证任何窗口比例下都居中合适 */
+.launch-button {
+  position: relative;
+  width: min(var(--opening-icon-size, 52vmin), 620px);
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+.launch-button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 15px; border-radius: 50%; }
+
+.codex-glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  will-change: transform, opacity;
+  transform: translateZ(0);          /* 单独合成层，旋转时更顺滑 */
+  backface-visibility: hidden;
+}
+/* 图片本身有 alpha 通道，这里只负责尺寸与清晰度，不加任何底色 */
+.codex-glyph img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+  filter: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  opacity: 0;
+}
+.codex-color { position:absolute; inset:0; --mark-a:var(--opening-start,#00d3ee); --mark-b:var(--opening-end,#19ff9e); background:linear-gradient(135deg,var(--mark-a),var(--mark-b)); mask-size:100% 100%; mask-repeat:no-repeat; -webkit-mask-size:100% 100%; -webkit-mask-repeat:no-repeat; opacity:0; will-change:opacity; transform:translateZ(0); }
+.opening-ring,.opening-ignition { position:absolute; width:140%; height:140%; left:-20%; top:-20%; overflow:visible; pointer-events:none; }
+.opening-ring line { stroke:var(--opening-ring-color,#24ffc9); stroke-width:.8; opacity:.08; }
+.opening-ignition { opacity:0; }
+
+.video-shell {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  background: transparent;
+  pointer-events: none;
+}
+.video-shell video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: transparent;
+}
+
+.star-tail { position: absolute; inset: 0; z-index: 0; opacity: 0; pointer-events: none; }
+.star-tail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.brand-reveal { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; opacity: 0; pointer-events: none; }
+.brand-lockup { position: absolute; left: var(--brand-x, 50%); top: var(--brand-y, 50%); transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; color: #fff; text-align: center; }
+.brand-logo-position { transform: translate(var(--icon-x, 0px), var(--icon-y, 0px)); margin-bottom: var(--icon-gap, 3.3vmin); }
+.brand-logo { display: block; width: var(--brand-icon-size, clamp(96px, 19.5vmin, 280px)); height: var(--brand-icon-size, clamp(96px, 19.5vmin, 280px)); object-fit: contain; }
+.brand-motto, .brand-name, .brand-caption { display: flex; align-items: baseline; justify-content: center; white-space: nowrap; }
+.brand-motto { font-family: var(--motto-font, 'Microsoft YaHei'), sans-serif; font-size: var(--motto-size, clamp(20px, 4.3vmin, 62px)); font-weight: 800; line-height: 1.25; gap: var(--motto-spacing, .24em); transform: translate(var(--motto-x, 0px), var(--motto-y, 0px)); }
+.brand-name { font-family: var(--name-font, Arial), sans-serif; font-size: var(--name-size, clamp(19px, 4vmin, 58px)); font-weight: 800; line-height: 1.25; gap: var(--name-spacing, .24em); margin-top: var(--name-gap, 1.1vmin); transform: translate(var(--name-x, 0px), var(--name-y, 0px)); }
+.brand-caption { font-family: var(--caption-font, Arial), sans-serif; font-size: var(--caption-size, clamp(11px, 1.5vmin, 22px)); font-weight: 700; line-height: 1.5; gap: var(--caption-spacing, .48em); color: #c5c5c5; margin-top: var(--caption-gap, 1.3vmin); transform: translate(var(--caption-x, 0px), var(--caption-y, 0px)); }
+.brand-char { display: block; opacity: 0; will-change: transform, opacity; }
+.brand-logo { background:var(--brand-icon-color,#ffffff); mask-size:contain; mask-position:center; mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; -webkit-mask-repeat:no-repeat; }
+.brand-logo img { display:block; width:100%; height:100%; opacity:0; }
+.brand-motto { color:var(--motto-color,#ffffff); }
+.brand-name { color:var(--name-color,#ffffff); }
+.brand-caption { color:var(--caption-color,#c5c5c5); }
+/* Adapted from the registry light-sweep-pass component: a single scalar owns the light position. */
+.brand-light { --light-x: -35; position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+.light-band { position: absolute; inset: -55%; opacity: 0; background: linear-gradient(103deg, transparent 36%, rgba(255,255,255,.06) 46%, rgba(255,255,255,.34) 50%, rgba(255,255,255,.06) 54%, transparent 64%); transform: translateX(calc((var(--light-x) - 50) * 1.4vw)); will-change: transform, opacity; }
+.white-flash { position: absolute; inset: 0; z-index: 4; background: #fff; opacity: 0; pointer-events: none; }
+
+.starfield { position: absolute; inset: 0; opacity: 0; pointer-events: none; display: none; }
+
+.finish-lockup {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 290px);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.finish-kicker { color: rgba(215, 237, 255, .5); font-size: 11px; font-weight: 700; letter-spacing: .38em; }
+.finish-title { margin-top: 11px; color: rgba(244, 250, 255, .94); font-size: 21px; font-weight: 650; letter-spacing: .28em; }
+
+.replay {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 34px;
+  padding: 9px 15px;
+  border: 1px solid rgba(218, 238, 255, .25);
+  border-radius: 999px;
+  background: rgba(8, 12, 18, .42);
+  color: rgba(231, 241, 251, .68);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: .1em;
+  cursor: pointer;
+  opacity: 0;
+}
+.replay:hover { background: rgba(48, 83, 112, .42); color: var(--ink); }
+
+.settings-button {
+  position: absolute;
+  z-index: 8;
+  right: 120px;
+  top: 22px;
+  min-width: 52px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(218,238,255,.2);
+  border-radius: 7px;
+  background: rgba(8,12,18,.42);
+  color: rgba(231,241,251,.72);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.settings-button:hover { color: var(--ink); background: rgba(48,83,112,.42); }
+
+.settings-panel {
+  position: absolute;
+  z-index: 7;
+  right: 24px;
+  top: 68px;
+  width: 256px;
+  padding: 16px;
+  border: 1px solid rgba(218,238,255,.18);
+  border-radius: 12px;
+  background: rgba(9,14,22,.92);
+  box-shadow: 0 16px 45px rgba(0,0,0,.35);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+.settings-panel.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.settings-header { display: flex; align-items: center; justify-content: space-between; color: rgba(244,250,255,.92); font-size: 14px; }
+.settings-close { border: 1px solid rgba(218,238,255,.16); border-radius: 5px; padding: 4px 7px; background: transparent; color: rgba(231,241,251,.62); font: inherit; font-size: 11px; cursor: pointer; }
+.settings-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; color: rgba(231,241,251,.78); font-size: 13px; cursor: pointer; }
+.settings-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle-track { width: 40px; height: 22px; padding: 3px; border-radius: 20px; background: rgba(161,178,196,.28); }
+.toggle-track span { display: block; width: 16px; height: 16px; border-radius: 50%; background: #e8f4ff; }
+.settings-toggle input:checked + .toggle-track { background: #5598d7; }
+.settings-toggle input:checked + .toggle-track span { transform: translateX(18px); }
+.settings-toggle input:focus-visible + .toggle-track { outline: 2px solid #b9eeff; outline-offset: 3px; }
+.preview-button { width: 100%; margin-top: 18px; padding: 10px 12px; border: 1px solid rgba(218,238,255,.2); border-radius: 7px; background: rgba(22,35,50,.68); color: rgba(239,247,255,.88); font: inherit; font-size: 12px; cursor: pointer; }
+.preview-button:hover { background: rgba(48,83,112,.7); }
+
+body[data-mode="splash"] .settings-button,
+body[data-mode="splash"] .settings-panel,
+body[data-mode="splash"] .replay,
+body[data-mode="splash"] .overlay-close { display: none; }
+
+.overlay-close { position: absolute; z-index: 8; left: 24px; top: 22px; padding: 7px 10px; border: 1px solid #758295; border-radius: 7px; background: #111722; color: #f5f7fb; font: inherit; font-size: 12px; cursor: pointer; }
+body:not([data-mode="preview"]) .overlay-close { display: none; }
+body[data-mode="settings"] { background: #0b0e14; }
+body[data-mode="settings"] .launch-stage,
+body[data-mode="settings"] .video-shell,
+body[data-mode="settings"] .star-tail,
+body[data-mode="settings"] .brand-reveal,
+body[data-mode="settings"] .brand-light,
+body[data-mode="settings"] .white-flash,
+body[data-mode="settings"] .settings-button,
+body[data-mode="settings"] .replay { display: none; }
+body[data-mode="settings"] .settings-panel { position: relative; right: auto; top: auto; width: min(440px, calc(100% - 40px)); margin: 24px auto; transform: none; opacity: 1; pointer-events: auto; box-shadow: none; background: #101722; }
+.settings-description, .settings-status { font-size: 12px; line-height: 1.6; color: #b7c4d5; }
+.settings-status { margin-bottom: 0; min-height: 38px; }
+.settings-description { margin: 12px 0; }
+
+body[data-mode="editor"] .settings-button,
+body[data-mode="editor"] .settings-panel,
+body[data-mode="editor"] .replay,
+body[data-mode="editor"] .overlay-close { display: none; }
