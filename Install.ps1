@@ -1,6 +1,7 @@
 ﻿[CmdletBinding(SupportsShouldProcess)]
 param([string]$ShortcutPath,[switch]$SkipPluginRegistration)
 $ErrorActionPreference='Stop'
+trap { [Console]::Error.WriteLine($_.ScriptStackTrace); throw }
 if($env:OS -ne 'Windows_NT'){throw 'Windows 10/11 is required.'}
 $source=$PSScriptRoot
 $target=Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation'
