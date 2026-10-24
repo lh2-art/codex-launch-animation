@@ -16,6 +16,7 @@ public static class AnimationMcpRelay {
    if(System.Environment.GetEnvironmentVariable("CODEX_ANIMATION_MCP_DEBUG")=="1")System.Console.Error.WriteLine("[animation-mcp] Relaying "+count+" bytes");
    await output.WriteAsync(bytes,0,count).ConfigureAwait(false);
    await output.FlushAsync().ConfigureAwait(false);
+   if(System.Environment.GetEnvironmentVariable("CODEX_ANIMATION_MCP_DEBUG")=="1")System.Console.Error.WriteLine("[animation-mcp] Flushed "+count+" bytes");
   }
  }
 }

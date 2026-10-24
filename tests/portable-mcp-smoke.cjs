@@ -12,6 +12,7 @@ const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).diges
  ps(['-File',create,'-Link',link]);const before=hash(link);
  ps(['-File',path.join(root,'Install.ps1'),'-ShortcutPath',link,'-SkipPluginRegistration']);
  const installed=path.join(local,'CodexLaunchAnimation'),state=JSON.parse(fs.readFileSync(path.join(installed,'install-state.json'),'utf8').replace(/^\uFEFF/,''));assert.equal(state.shortcut,link);assert.equal(hash(path.join(installed,'original-shortcut.lnk')),before);
+ const probe=spawnSync(path.join(installed,'desktop-extension/electron.exe'),['-e','console.log(JSON.stringify({node:process.version,runAsNode:true}))'],{env:{...env,ELECTRON_RUN_AS_NODE:'1'},encoding:'utf8',timeout:15000,windowsHide:true});console.log(JSON.stringify({runtimeProbeStatus:probe.status,signal:probe.signal,error:probe.error?.code,stdout:probe.stdout,stderr:probe.stderr}));assert.equal(probe.status,0,'Bundled Electron must run as Node');
  const manifest=JSON.parse(fs.readFileSync(path.join(installed,'in-app-plugin/.mcp.json'),'utf8')).mcpServers.launch_animation;
  assert.equal(manifest.command,'powershell.exe');assert.ok(!JSON.stringify(manifest).includes(root),'Public MCP configuration must not embed checkout path');
  const transport=new StdioClientTransport({command:manifest.command,args:manifest.args,cwd:installed,env:{...env,...manifest.env}}),client=new Client({name:'portable-install-verification',version:'1.0.0'});
