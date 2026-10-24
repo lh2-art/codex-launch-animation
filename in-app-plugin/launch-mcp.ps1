@@ -1,5 +1,8 @@
 ﻿$ErrorActionPreference='Stop'
 function Trace-Mcp([string]$Message){if($env:CODEX_ANIMATION_MCP_DEBUG -eq '1'){[Console]::Error.WriteLine('[animation-mcp] '+$Message)}}
+# Process.StandardInput uses Console.InputEncoding on .NET Framework.
+# UTF-8 with a BOM writes EF BB BF before MCP JSON, preventing initialization.
+[Console]::InputEncoding=[Text.UTF8Encoding]::new($false)
 Trace-Mcp 'Compiling byte relay'
 Add-Type -TypeDefinition @'
 using System.IO;

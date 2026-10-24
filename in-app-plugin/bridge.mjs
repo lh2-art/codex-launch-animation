@@ -1,6 +1,6 @@
 import { App } from '@modelcontextprotocol/ext-apps';
 
-const app = new App({ name: 'ChatGPT 启动动画', version: '2.7.1' }, {}, { autoResize: false });
+const app = new App({ name: 'ChatGPT 启动动画', version: '2.7.2' }, {}, { autoResize: false });
 const tr = source => window.AnimationI18n.text(source);
 let connected;
 let mediaPromise;

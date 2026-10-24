@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-launch-animation",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "在 ChatGPT 内调整和预览本机启动动画，控制字体、字号、位置、间距、图标大小及启用状态。",
   "author": {
     "name": "Mayn"
