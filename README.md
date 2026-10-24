@@ -20,7 +20,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
 
 安装到当前用户的 `%LOCALAPPDATA%\CodexLaunchAnimation`，不需要管理员权限。会备份并更新已有 `ChatGPT.lnk` 或 `Codex.lnk`，保留其名称和图标；若两者都存在，请用 `-ShortcutPath` 指定。两者都不存在时创建“Codex 启动动画”入口。安装不会关闭或重启正在运行的 Codex。
 
-可以先加 `-WhatIf` 查看操作计划。不想注册应用内控制页时可加 `-SkipPluginRegistration`；此时仍可运行安装目录里的 `desktop-extension\ChatGPT启动扩展.exe --settings`。
+可以先加 `-WhatIf` 查看操作计划。不想注册应用内控制页时可加 `-SkipPluginRegistration`；此时仍可运行安装目录里的 `desktop-extension\CodexLaunchAnimation.exe --settings`。
 
 应用内控制页入口：`codex://plugins/chatgpt-launch-animation@codex-launch-animation/app/open_animation_control`。修改或升级插件后，旧控制页可能需要关闭后重新打开；不要为了安装而强行结束 Codex。
 

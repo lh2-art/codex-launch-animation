@@ -6,11 +6,11 @@ if($env:OS -ne 'Windows_NT'){throw 'Windows 10/11 is required.'}
 $source=$PSScriptRoot
 $target=Join-Path $env:LOCALAPPDATA 'CodexLaunchAnimation'
 $desktopRuntime=Join-Path $source 'desktop-extension'
-$executable=Join-Path $desktopRuntime 'ChatGPT启动扩展.exe'
+$executable=Join-Path $desktopRuntime 'CodexLaunchAnimation.exe'
 $plugin=Join-Path $source 'in-app-plugin\dist'
 if(!(Test-Path -LiteralPath (Join-Path $plugin 'server.cjs'))){$plugin=Join-Path $source 'in-app-plugin'}
 if(!(Test-Path -LiteralPath $executable) -or !(Test-Path -LiteralPath (Join-Path $plugin 'server.cjs'))){throw 'Build the project first, or download and fully extract the Windows release ZIP.'}
-$existing=@(Get-CimInstance Win32_Process -Filter "Name='ChatGPT启动扩展.exe'" | Where-Object {$_.ExecutablePath -and $_.ExecutablePath.StartsWith($target+'\',[StringComparison]::OrdinalIgnoreCase)})
+$existing=@(Get-CimInstance Win32_Process -Filter "Name='CodexLaunchAnimation.exe'" | Where-Object {$_.ExecutablePath -and $_.ExecutablePath.StartsWith($target+'\',[StringComparison]::OrdinalIgnoreCase)})
 if($existing.Count){throw 'Close the startup-animation console before updating. The Codex application can remain open.'}
 $desktop=[Environment]::GetFolderPath('Desktop')
 if(!$ShortcutPath){
@@ -19,7 +19,7 @@ if(!$ShortcutPath){
  if(@($candidates).Count -eq 1){$ShortcutPath=@($candidates)[0]}else{$ShortcutPath=Join-Path $desktop 'Codex 启动动画.lnk'}
 }
 $ShortcutPath=[IO.Path]::GetFullPath($ShortcutPath)
-$runtimeTarget=Join-Path $target 'desktop-extension\ChatGPT启动扩展.exe'
+$runtimeTarget=Join-Path $target 'desktop-extension\CodexLaunchAnimation.exe'
 $shell=New-Object -ComObject WScript.Shell
 function Copy-InstallTree([string]$From,[string]$To){
  foreach($item in Get-ChildItem -LiteralPath $From -File -Recurse -Force){

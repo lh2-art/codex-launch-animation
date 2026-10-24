@@ -30,6 +30,6 @@ New-Item -ItemType Directory -Path $assetsRoot -Force | Out-Null
 foreach ($name in @('opening-clouds.png','chatgpt-taskbar.ico','chatgpt-shortcut-icon.png','gpt6-stars-full.mp4','gpt6-stars-full-poster.jpg','gpt6-stars-tail.jpg','gsap.min.js')) {
     Copy-Item -LiteralPath (Join-Path $projectRoot ('assets\' + $name)) -Destination $assetsRoot -Force
 }
-if (!$ResourcesOnly) { Copy-Item -LiteralPath (Join-Path $outputRoot 'electron.exe') -Destination (Join-Path $outputRoot 'ChatGPT启动扩展.exe') -Force }
-Write-Output (Join-Path $outputRoot 'ChatGPT启动扩展.exe')
+if (!$ResourcesOnly) { Copy-Item -LiteralPath (Join-Path $outputRoot 'electron.exe') -Destination (Join-Path $outputRoot 'CodexLaunchAnimation.exe') -Force }
+Write-Output (Join-Path $outputRoot 'CodexLaunchAnimation.exe')
 
